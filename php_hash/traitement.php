@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 if(isset($_GET["action"])) {
     switch($_GET["action"]) {
@@ -52,17 +53,32 @@ if(isset($_GET["action"])) {
                 // connexion à la base de données
                 $pdo = new PDO("mysql:host=localhost;dbname=php_hash;charset=utf8", "root", "");
 
-                // on vérifie et filtre les différents input
+                // filtrer les champs (faille XSS)
                 $email = filter_input(INPUT_POST, "email",FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL); // filtre pour lutter contre la faille XSS
                 $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-                //on vérife que les filtres sont passés
+                //on vérife que les filtres sont valides
                 if($email && $password) {
                     $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email"); // requete préparée pour lutter contre la faille d'injection SQL
                     $requete->execute(["email" => $email]);
                     $user = $requete->fetch();
                     //var_dump($user); die;
-                    
+
+                    // si l'utilisateur existe
+                    if($user) {
+                        $hash = $user["password"]; // on récupère le mot de passe haché de la BDD (accessible de puis la variable $user)
+
+                        if(password_verify($password, $hash)) { // on vérifie vérifie que les empreintes numériques correspondent à l'aide de la fonction password_verify()
+                            $_SESSION["user"] = $user; // si les mdp correspondent, on met $user en session à l'aide de la superglobale $_SESSION
+                            header("Location: home.php"); exit; // on redirige l'utilisateur
+                        } else {
+                            header("Location: login.php"); exit;
+                            // message utilisateur inconnu ou mot de passe incorrect
+                        }
+                    } else {
+                        header("Location: login.php"); exit;
+                        // message utilisateur inconnu ou mot de passe incorrect
+                    }
                 }
             } 
 
