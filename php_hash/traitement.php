@@ -3,6 +3,7 @@
 if(isset($_GET["action"])) {
     switch($_GET["action"]) {
         case "register":
+            // si le formulaire est soumis
             if($_POST["submit"]) {
                 // connexion à la base de données
                 $pdo = new PDO("mysql:host=localhost;dbname=php_hash;charset=utf8", "root", "");
@@ -39,7 +40,7 @@ if(isset($_GET["action"])) {
                     // problème de saisie dans les champs de formulaire
                 }
             }
-
+            // par défaut j'affiche le formulaire d'inscription
             header("Location: register.php"); exit;
 
         break;
@@ -47,6 +48,25 @@ if(isset($_GET["action"])) {
         case "login":
             //connexion à l'application
 
+            if($_POST["submit"]) { // si le formulaire est soumis
+                // connexion à la base de données
+                $pdo = new PDO("mysql:host=localhost;dbname=php_hash;charset=utf8", "root", "");
+
+                // on vérifie et filtre les différents input
+                $email = filter_input(INPUT_POST, "email",FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_VALIDATE_EMAIL); // filtre pour lutter contre la faille XSS
+                $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+                //on vérife que les filtres sont passés
+                if($email && $password) {
+                    $requete = $pdo->prepare("SELECT * FROM user WHERE email = :email"); // requete préparée pour lutter contre la faille d'injection SQL
+                    $requete->execute(["email" => $email]);
+                    $user = $requete->fetch();
+                    //var_dump($user); die;
+                    
+                }
+            } 
+
+            header("Location: login.php"); exit;
         break;
 
         case "logout":
