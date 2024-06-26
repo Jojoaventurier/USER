@@ -23,3 +23,5 @@ echo $sha256."<br>";
 // la fonction password_hash() créé un nouveau hachage en utilisant un alogorithme de hachage fort et irréversible
 $hash = password_hash($password, PASSWORD_DEFAULT);
 echo $hash."<br>";
+// Avec l'utilisation de BCRYPT, le mot de passe hashé change à chaque refresh, de façon aléatoire. 
+// Par ailleurs, également à la différence des algorithmes de hashage faibles, le même mot de passe ne donnent pas le même mot de passe hashé. Le salt et le hashage sera différent pour le même mot de passe. 
