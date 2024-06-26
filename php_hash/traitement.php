@@ -66,7 +66,7 @@ if(isset($_GET["action"])) {
 
                     // si l'utilisateur existe
                     if($user) {
-                        $hash = $user["password"]; // on récupère le mot de passe haché de la BDD (accessible de puis la variable $user)
+                        $hash = $user["password"]; // on récupère le mot de passe haché de la BDD (accessible depuis la variable $user)
 
                         if(password_verify($password, $hash)) { // on vérifie vérifie que les empreintes numériques correspondent à l'aide de la fonction password_verify()
                             $_SESSION["user"] = $user; // si les mdp correspondent, on met $user en session à l'aide de la superglobale $_SESSION
