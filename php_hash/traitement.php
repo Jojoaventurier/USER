@@ -87,9 +87,11 @@ if(isset($_GET["action"])) {
 
         case "profile": 
             header("Location: profile.php"); exit;
+        break;
 
         case "logout":
-
+            unset($_SESSION["user"]);
+            header("Location: home.php"); exit;
         break;
     }
 }
