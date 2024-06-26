@@ -14,6 +14,7 @@
         // si je suis connecté
         if(isset($_SESSION["user"])) { ?>
             <a href="traitement.php?action=logout">Se déconnecter</a>
+            <a href="traitement.php?action=profile">Mon profil</a>
         <?php } else { ?>
             <a href="traitement.php?action=login"> Se connecter</a>
             <a href="traitement.php?action=register"> S'inscrire</a>

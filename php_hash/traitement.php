@@ -85,6 +85,9 @@ if(isset($_GET["action"])) {
             header("Location: login.php"); exit;
         break;
 
+        case "profile": 
+            header("Location: profile.php"); exit;
+
         case "logout":
 
         break;
