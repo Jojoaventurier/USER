@@ -9,7 +9,6 @@
 </head>
 <body>
     
-
     <?php 
         // si je suis connecté
         if(isset($_SESSION["user"])) { ?>
